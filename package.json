@@ -1,0 +1,17 @@
+{
+  "name": "moeda-bot",
+  "version": "1.0.0",
+  "description": "Agente financeiro WhatsApp com IA",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.0",
+    "@notionhq/client": "^2.2.15",
+    "@google/genai": "^0.1.2",
+    "dotenv": "^16.4.5",
+    "pino": "^8.20.0"
+  }
+}
