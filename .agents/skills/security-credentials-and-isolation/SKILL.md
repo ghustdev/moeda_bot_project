@@ -22,7 +22,6 @@ This skill enforces security rules for managing API tokens, credentials, and con
 ## 2. Credential Verification Checklist
 
 Before pushing commits or running remote jobs:
-
 - [ ] Run `git status` to verify `auth_info_baileys/` or `.env` are untracked.
 - [ ] Check `.gitignore` for `.env`, `*.log`, and credentials directory.
 - [ ] Verify that third-party SDK calls pass API keys from `process.env` rather than hardcoded strings.
@@ -31,3 +30,4 @@ Before pushing commits or running remote jobs:
 
 - Restrict Notion API integrations to **Internal Integration** mode.
 - Only grant access to the specific database pages needed (do not grant workspace-wide read access).
+

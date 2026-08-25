@@ -20,52 +20,49 @@ This skill defines best practices for extracting structured expense data (item, 
 ### Single-Call Audio and Text Processing
 
 ```javascript
-import { GoogleGenAI } from "@google/genai";
-import { SYSTEM_PROMPT, EXPENSE_SCHEMA } from "./prompt.js";
+import { GoogleGenAI } from '@google/genai';
+import { SYSTEM_PROMPT, EXPENSE_SCHEMA } from './prompt.js';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-export async function parseExpense({
-  text,
-  audioBuffer,
-  mimeType = "audio/ogg",
-}) {
-  const contents = [];
+export async function parseExpense({ text, audioBuffer, mimeType = 'audio/ogg' }) {
+    const contents = [];
 
-  if (audioBuffer) {
-    contents.push({
-      inlineData: {
-        mimeType,
-        data: audioBuffer.toString("base64"),
-      },
-    });
-    contents.push({
-      text: "Analise este áudio e extraia os dados de gasto conforme as instruções do sistema.",
-    });
-  } else if (text) {
-    contents.push({
-      text: `Analise o seguinte texto e extraia os dados de gasto:\n"${text}"`,
-    });
-  }
+    if (audioBuffer) {
+        contents.push({
+            inlineData: {
+                mimeType,
+                data: audioBuffer.toString('base64')
+            }
+        });
+        contents.push({
+            text: 'Analise este áudio e extraia os dados de gasto conforme as instruções do sistema.'
+        });
+    } else if (text) {
+        contents.push({
+            text: `Analise o seguinte texto e extraia os dados de gasto:\n"${text}"`
+        });
+    }
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents,
-    config: {
-      systemInstruction: SYSTEM_PROMPT,
-      responseMimeType: "application/json",
-      responseSchema: EXPENSE_SCHEMA,
-      temperature: 0.1,
-    },
-  });
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents,
+        config: {
+            systemInstruction: SYSTEM_PROMPT,
+            responseMimeType: 'application/json',
+            responseSchema: EXPENSE_SCHEMA,
+            temperature: 0.1
+        }
+    });
 
-  return JSON.parse(response.text.trim());
+    return JSON.parse(response.text.trim());
 }
 ```
 
 ## Prompt Normalization & Edge Cases
 
 - **Currency Parsing**: Convert Brazilian real formats (`"R$ 35,90"`, `"35 reais e noventa centavos"`, `"35.9"`) to numeric floats (`35.9`).
-- **Date Handling**: Inject current date context (`{{DATA_HOJE}}`) and resolve relative dates (_"ontem"_ = $D-1$, _"anteontem"_ = $D-2$).
+- **Date Handling**: Inject current date context (`{{DATA_HOJE}}`) and resolve relative dates (*"ontem"* = $D-1$, *"anteontem"* = $D-2$).
 - **Category Enforcement**: Force mapping strictly to the 12 authorized Notion tags.
 - **Ambiguity Guard**: When no financial transaction is detected, return an `erro` field describing the clarification needed.
+

@@ -17,7 +17,7 @@ To prevent unauthorized users or external chats from triggering AI compute or in
   ```javascript
   const remoteJid = msg.key.remoteJid;
   if (ALLOWED_GROUP_ID && remoteJid !== ALLOWED_GROUP_ID) {
-    return; // Ignore silently
+      return; // Ignore silently
   }
   ```
 - Reject broadcast messages (`status@broadcast`) and messages sent by the bot itself (`msg.key.fromMe`).
@@ -35,3 +35,4 @@ WhatsApp users may unintentionally or maliciously send text designed to override
 - Verify that `parsedData.valor` is a finite positive number before writing to Notion.
 - Reject NaN, negative values, or zero amounts.
 - Validate that `parsedData.categoria` belongs strictly to the authorized whitelist of 12 categories.
+
